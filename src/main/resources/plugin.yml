@@ -1,0 +1,26 @@
+name: CVLoadouts
+main: org.cubeville.cvloadouts.CVLoadouts
+author: KipperOrigin,FrediW
+version: 0.2
+api-version: 1.16
+
+depend: [CVTools]
+
+commands:
+  loadout:
+    permission: cvloadouts.admin
+    
+permissions:
+  
+  cvloadouts.admin:
+    description: Gives player access to every PvP command
+    default: op
+  cvloadouts.loadout.*:
+    description: Unlimited use of loadouts
+    default: op
+  cvloadouts.loadout.commands:
+    description: Permission for loadout commands
+    default: op
+  cvloadouts.loadout.standard:
+    description: Permission for loadout usage
+    default: op
