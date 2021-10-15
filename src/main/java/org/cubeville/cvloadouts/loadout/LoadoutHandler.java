@@ -123,13 +123,13 @@ public class LoadoutHandler {
         return true;
     }
 	
-    public static boolean applyLoadoutFromSign(Player player, Sign sign) {		
-        LoadoutContainer lc = CVLoadouts.getInstance().getLoadoutManager().getLoadoutByName(sign.getLine(2));
+    public static boolean applyLoadoutFromSign(Player player, Sign sign, String regexFilter) {
+        LoadoutContainer lc = CVLoadouts.getInstance().getLoadoutManager().getLoadoutByName(sign.getLine(2).replaceAll(regexFilter, ""));
 		
         if (lc == null)
             return false;
 		
-        applyLoadoutToPlayer(player, lc, sign.getLine(3));
+        applyLoadoutToPlayer(player, lc, sign.getLine(3).replaceAll(regexFilter, ""));
         return true;
     }
     
