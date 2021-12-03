@@ -3,6 +3,8 @@ package org.cubeville.cvloadouts;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -72,4 +74,13 @@ public class CVLoadouts extends JavaPlugin {
         }
         return false;
     }
+
+    // Here follow some API functions (well, one, so far ;) )
+    public ItemStack getLoadoutItem(String loadoutName, int itemIndex) {
+	LoadoutContainer container = loadoutManager.getLoadoutByName(loadoutName);
+	if(container == null) return null;
+	Inventory inventory = container.getMainInventory();
+	return inventory.getItem(itemIndex);
+    }
+    
 }
