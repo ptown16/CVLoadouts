@@ -38,17 +38,12 @@ public class CVLoadouts extends JavaPlugin {
         commandParser = new CommandParser();
         commandParser.addCommand(new GiveLoadoutItemToPlayer());
         commandParser.addCommand(new LoadoutApply());
-        //commandParser.addCommand(new LoadoutBlacklistPlayer());
         commandParser.addCommand(new LoadoutCreate());
         commandParser.addCommand(new LoadoutClone());
         commandParser.addCommand(new LoadoutEdit());
         commandParser.addCommand(new LoadoutInfo());
         commandParser.addCommand(new LoadoutList());
         commandParser.addCommand(new LoadoutRemove());
-        //commandParser.addCommand(new LoadoutTagAdd());
-        //commandParser.addCommand(new LoadoutTagClear());
-        //commandParser.addCommand(new LoadoutTagRemove());
-        //commandParser.addCommand(new LoadoutUnblacklistPlayer());
         //commandParser.addCommand(new SpawnItem());
         
         PluginManager pm = getServer().getPluginManager();

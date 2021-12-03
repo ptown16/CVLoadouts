@@ -32,12 +32,6 @@ public class LoadoutInfo extends Command {
                 cr.addMessage("&a-" + loadoutName);
             }
 
-            cr.addMessage("&6---Tags");
-
-            for (String tag: lc.getTags()) {
-                cr.addMessage("&a-" + tag);
-            }
-
             return cr;
         } else {
             throw new CommandExecutionException("&cLoadout &6" + baseParameters.get(0).toString().toLowerCase() + " &cdoes not exist!");
