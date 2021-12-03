@@ -66,6 +66,17 @@ public class LoadoutHandler {
 
         return true;
     }
+
+    public static int getLoadoutSize(LoadoutContainer lc, String name) {
+        Inventory inventory = lc.getInventory(name);
+        int count = 0;
+        for(int i = 0; i < 54; i++) {
+            if(inventory.getItem(i) != null) {
+                count++;
+            }
+        }
+        return count;
+    }
     
     public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, String name) {
         if (lc.getInventory(name) == null)

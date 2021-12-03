@@ -7,6 +7,7 @@ import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.cvloadouts.CVLoadouts;
 import org.cubeville.cvloadouts.loadout.LoadoutContainer;
+import org.cubeville.cvloadouts.loadout.LoadoutHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class LoadoutInfo extends Command {
             cr.addMessage("&6---Sub-Loadouts");
 
             for (String loadoutName: lc.getInventoriesByName()) {
-                cr.addMessage("&a-" + loadoutName);
+                cr.addMessage("&a-" + loadoutName + " &6(&a" + LoadoutHandler.getLoadoutSize(lc, loadoutName) + "&6)");
             }
 
             return cr;
