@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
-import org.cubeville.commons.commands.CommandParameterListString;
 import org.cubeville.commons.commands.CommandResponse;
-import org.cubeville.cvtools.commands.CommandParameterLoadout;
 import org.cubeville.cvloadouts.CVLoadouts;
-import org.cubeville.cvloadouts.loadout.LoadoutContainer;
 
 public class LoadoutList extends Command{
 
@@ -21,8 +22,7 @@ public class LoadoutList extends Command{
     public LoadoutList(){
         super("list");
         setPermission("cvloadouts.commands");
-        addParameter("sub", true, new CommandParameterLoadout());
-        addParameter("tags", true, new CommandParameterListString());
+        //addParameter("sub", true, new CommandParameterLoadout());
     }
 
     @SuppressWarnings("unchecked")
@@ -30,32 +30,23 @@ public class LoadoutList extends Command{
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters)
         throws CommandExecutionException {
         List<String> loadouts = CVLoadouts.getInstance().getLoadoutManager().getLoadoutNames();
-        cr = new CommandResponse("&6========================&aLoadouts&6========================");
-		
-        if (parameters.containsKey("sub") && !parameters.containsKey("tags")) {
-            cr.setBaseMessage("&6===================&aLoadout " + ((LoadoutContainer) parameters.get("sub")).getName() + "&6===================");
-            loadouts = ((LoadoutContainer) parameters.get("sub")).getInventoriesByName();
-        } else if (!parameters.containsKey("sub") && parameters.containsKey("tags")) {
-            String tagsString = "";
-			
-            for(String tag: (List<String>) parameters.get("tags")) {
-                tagsString = tagsString + "&a" + tag.toLowerCase() + "&c,";
-            }
-			
-            tagsString = tagsString.substring(0, tagsString.length() - 1);
-			
-            cr.setBaseMessage("&6=====&aTags " + tagsString + "&6=====");
-            loadouts = CVLoadouts.getInstance().getLoadoutManager().getLoadoutNamesByTags((List<String>) parameters.get("tags"));
-        }
-		
-        String message = "";
+        List<TextComponent> out = new ArrayList<>();
+        out.add(new TextComponent("§6========================§aLoadouts§6========================"));
+        TextComponent load = new TextComponent("");
+        int i = loadouts.size();
         for (String mloadout: loadouts) {
-            message += "&f" + mloadout + "&c||";
+            TextComponent m = new TextComponent(mloadout);
+            m.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/loadout edit " + mloadout));
+            m.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Edit " + mloadout).create()));
+            i--;
+            if(i >= 1) m.addExtra("§c||");
+            load.addExtra(m);
         }
-        if (message.length() > 2) message = message.substring(0, message.length() - 2);
-        cr.addMessage(message);
-		
-        return cr;
+        out.add(load);
+        for (TextComponent o : out) {
+            player.spigot().sendMessage(o);
+        }
+        return new CommandResponse("");
     }
 	
     public void createMessage(List<String> loadouts) {
