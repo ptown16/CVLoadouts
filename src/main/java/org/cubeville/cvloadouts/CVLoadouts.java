@@ -3,6 +3,7 @@ package org.cubeville.cvloadouts;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -13,6 +14,8 @@ import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.cvloadouts.commands.*;
 import org.cubeville.cvloadouts.loadout.LoadoutContainer;
 import org.cubeville.cvloadouts.loadout.LoadoutManager;
+import org.cubeville.cvloadouts.loadout.LoadoutHandler;
+import java.util.Set;
 
 public class CVLoadouts extends JavaPlugin {
 
@@ -77,5 +80,15 @@ public class CVLoadouts extends JavaPlugin {
 	Inventory inventory = container.getMainInventory();
 	return inventory.getItem(itemIndex);
     }
-    
+
+    public ItemStack getLoadoutItem(String loadoutName, String subloadoutName, int itemIndex) {
+	LoadoutContainer container = loadoutManager.getLoadoutByName(loadoutName);
+	if(container == null) return null;
+	Inventory inventory = container.getInventory(subloadoutName);
+	return inventory.getItem(itemIndex);
+    }
+
+    public void applyLoadoutToPlayer(Player player, String loadoutName, Set<String> subLoadoutNames) {
+        LoadoutHandler.applyLoadoutToPlayer(player, loadoutName, subLoadoutNames);
+    }
 }

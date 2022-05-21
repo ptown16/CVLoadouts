@@ -1,7 +1,7 @@
 name: CVLoadouts
 main: org.cubeville.cvloadouts.CVLoadouts
 author: KipperOrigin,FrediW
-version: 0.2
+version: 1.18
 api-version: 1.18
 
 depend: [CVTools]

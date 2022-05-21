@@ -1,14 +1,14 @@
 package org.cubeville.cvloadouts.loadout;
 
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.cubeville.commons.utils.PlayerUtils;
 import org.cubeville.cvloadouts.CVLoadouts;
-//import org.cubeville.cvtools.nbt.Attributes.AttributeType;
-//import org.cubeville.cvtools.nbt.Attributes.EquipmentSlot;
-//import org.cubeville.cvtools.nbt.NBTItem;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LoadoutHandler {
 
@@ -19,7 +19,7 @@ public class LoadoutHandler {
         if(item == null) throw new RuntimeException("Item slot is empty");
         return item;
     }
-    
+
     public static boolean giveLoadoutItemToPlayer(Player player, LoadoutContainer lc, String name, int index, boolean exclusive) {
         if(lc.getInventory(name) == null) return false;
 
@@ -77,60 +77,67 @@ public class LoadoutHandler {
         }
         return count;
     }
+
+    public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, String subloadoutName) {
+        Set<String> subLoadoutNames = new HashSet<>();
+        subLoadoutNames.add(subloadoutName);
+        return applyLoadoutToPlayer(player, lc, subLoadoutNames);
+    }
+
+    private static ItemStack getLoadoutItemAtIndex(LoadoutContainer lc, Inventory baseInventory, Set<Inventory> subInventories, int Index) {
+        ItemStack item = null;
+        for(Inventory i: subInventories) {
+            if(i.getItem(Index) != null) {
+                item = i.getItem(Index);
+                break;
+            }
+        }
+        if(item == null) item = baseInventory.getItem(Index);
+        return item;
+    }
+
+    public static boolean applyLoadoutToPlayer(Player player, String loadoutName, Set<String> subloadoutNames) {
+        LoadoutContainer lc = CVLoadouts.getInstance().getLoadoutManager().getLoadoutByName(loadoutName);
+        if(lc == null) return false;
+        return applyLoadoutToPlayer(player, lc, subloadoutNames);
+    }
     
-    public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, String name) {
-        if (lc.getInventory(name) == null)
-            return false;
-		
-        Inventory inventory = lc.getInventory(name);
+    public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, Set<String> subloadoutNames) {
+        Set<Inventory> subInventories = new HashSet<>();
+        for(String subloadoutName: subloadoutNames) {
+            if(lc.getInventory(subloadoutName) != null)
+                subInventories.add(lc.getInventory(subloadoutName));
+            else
+                return false;
+        }
         Inventory baseInventory = lc.getMainInventory();
 
-        //Update Player
-        player.getInventory().clear();
-        PlayerUtils.removeAllPotionEffects(player);
-		
-        //Hotbar & Offhand
-        if (inventory.getItem(49) != null) player.getInventory().setItemInOffHand(inventory.getItem(49));
-        else player.getInventory().setItemInOffHand(baseInventory.getItem(49));
-		
-        for (int i = 0; i < 9; i++) {
-            ItemStack item = inventory.getItem(i);
-			
-            if (item == null)
-                item = baseInventory.getItem(i);
-
-            if(item != null) {
-                System.out.println("Set hotbar item " + i + " to " + item.getType());
-            }
-            else {
-                System.out.println("Hotbar item " + i + " is null.");
-            }
-            player.getInventory().setItem(i, item);
+        //Offhand
+        {
+            ItemStack item = getLoadoutItemAtIndex(lc, baseInventory, subInventories, 49);
+            if(item == null || item.getType() != Material.BARRIER)
+                player.getInventory().setItemInOffHand(item);
         }
-		
+
+        // Hotbar and inventory contents
+        for (int i = 0; i < 36; i++) {
+            ItemStack item = getLoadoutItemAtIndex(lc, baseInventory, subInventories, i);
+            if(item == null || item.getType() != Material.BARRIER)
+                player.getInventory().setItem(i, item);
+        }
+
         //Armor
         int x = 45;
         for (int i = 39; i >= 36; i--) {
-            ItemStack item = inventory.getItem(x);
-            if (item == null)
-                item = baseInventory.getItem(x);
-            player.getInventory().setItem(i, item);
+            ItemStack item = getLoadoutItemAtIndex(lc, baseInventory, subInventories, x);
+            if(item == null || item.getType() != Material.BARRIER)
+                player.getInventory().setItem(i, item);
             x++;
         }
 
-        //Inventory Contents
-        for (int i = 9; i < 36; i++) {
-            ItemStack item = inventory.getItem(i);
-			
-            if (item == null)
-                item = baseInventory.getItem(i);
-			
-            player.getInventory().setItem(i, item);
-        }
-		
         //Update Inventory
         player.updateInventory();
-        //player.setHealth(getHealthOfArmorContents(player)); // TODO?
+
         return true;
     }
 	
