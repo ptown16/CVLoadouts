@@ -7,7 +7,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.cubeville.commons.utils.PlayerUtils;
 import org.cubeville.cvloadouts.CVLoadouts;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class LoadoutHandler {
@@ -79,12 +82,12 @@ public class LoadoutHandler {
     }
 
     public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, String subloadoutName) {
-        Set<String> subLoadoutNames = new HashSet<>();
+        List<String> subLoadoutNames = new ArrayList<>();
         subLoadoutNames.add(subloadoutName);
         return applyLoadoutToPlayer(player, lc, subLoadoutNames);
     }
 
-    private static ItemStack getLoadoutItemAtIndex(LoadoutContainer lc, Inventory baseInventory, Set<Inventory> subInventories, int Index) {
+    private static ItemStack getLoadoutItemAtIndex(LoadoutContainer lc, Inventory baseInventory, List<Inventory> subInventories, int Index) {
         ItemStack item = null;
         for(Inventory i: subInventories) {
             if(i.getItem(Index) != null) {
@@ -96,14 +99,14 @@ public class LoadoutHandler {
         return item;
     }
 
-    public static boolean applyLoadoutToPlayer(Player player, String loadoutName, Set<String> subloadoutNames) {
+    public static boolean applyLoadoutToPlayer(Player player, String loadoutName, List<String> subloadoutNames) {
         LoadoutContainer lc = CVLoadouts.getInstance().getLoadoutManager().getLoadoutByName(loadoutName);
         if(lc == null) return false;
         return applyLoadoutToPlayer(player, lc, subloadoutNames);
     }
     
-    public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, Set<String> subloadoutNames) {
-        Set<Inventory> subInventories = new HashSet<>();
+    public static boolean applyLoadoutToPlayer(Player player, LoadoutContainer lc, List<String> subloadoutNames) {
+        List<Inventory> subInventories = new ArrayList<>();
         for(String subloadoutName: subloadoutNames) {
             if(lc.getInventory(subloadoutName) != null)
                 subInventories.add(lc.getInventory(subloadoutName));

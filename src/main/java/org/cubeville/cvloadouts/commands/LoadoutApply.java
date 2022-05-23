@@ -1,9 +1,6 @@
 package org.cubeville.cvloadouts.commands;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,12 +37,12 @@ public class LoadoutApply extends BaseCommand {
             if (loadout == null)
                 throw new CommandExecutionException("&cLoadout &6" + baseParameters.get(0) + "&c does not exist!");
 
-            Set<String> subLoadouts;
+            List<String> subLoadouts;
             if (parameters.containsKey("team"))
-                subLoadouts = new HashSet<>((List<String>) parameters.get("team"));
+                subLoadouts = (List<String>) parameters.get("team");
             else
-                subLoadouts = new HashSet<>();
-            
+                subLoadouts = new ArrayList<>();
+
             if (parameters.containsKey("player"))
                 playerInv = (Player) parameters.get("player");
 
