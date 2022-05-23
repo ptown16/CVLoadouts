@@ -15,6 +15,8 @@ import org.cubeville.cvloadouts.commands.*;
 import org.cubeville.cvloadouts.loadout.LoadoutContainer;
 import org.cubeville.cvloadouts.loadout.LoadoutManager;
 import org.cubeville.cvloadouts.loadout.LoadoutHandler;
+
+import java.util.List;
 import java.util.Set;
 
 public class CVLoadouts extends JavaPlugin {
@@ -88,7 +90,7 @@ public class CVLoadouts extends JavaPlugin {
 	return inventory.getItem(itemIndex);
     }
 
-    public void applyLoadoutToPlayer(Player player, String loadoutName, Set<String> subLoadoutNames) {
+    public void applyLoadoutToPlayer(Player player, String loadoutName, List<String> subLoadoutNames) {
         LoadoutHandler.applyLoadoutToPlayer(player, loadoutName, subLoadoutNames);
     }
 }
